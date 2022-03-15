@@ -92,9 +92,9 @@ async function monitorContract() {
 
             // if more than one asset sold, link directly to etherscan tx, otherwise the marketplace item
             if (tokens.length > 1) {
-                tweet(`${_.get(tokenData, 'assetName', `#` + tokens[0])} & other assets bought for ${totalPrice} ${currency.name} on ${market.name} https://etherscan.io/tx/${transactionHash}`);
+                tweet(`Warrior of Aradena #${assetName} & other assets bought for ${totalPrice} ${currency.name} on ${market.name} https://etherscan.io/tx/${transactionHash}`);
             } else {
-                tweet(`${_.get(tokenData, 'assetName', `#` + tokens[0])} bought for ${totalPrice} ${currency.name} on ${market.name} ${market.site}${process.env.CONTRACT_ADDRESS}/${tokens[0]}`);
+                tweet(`Warrior of Aradena #${assetName} bought for ${totalPrice} ${currency.name} on ${market.name} ${market.site}${process.env.CONTRACT_ADDRESS}/${tokens[0]}`);
             }
         })
         .on('changed', (event) => {
@@ -120,7 +120,7 @@ async function getTokenData(tokenId) {
 
         // just the asset name for now, but retrieve whatever you need
         return {
-            'assetName': _.get(data, 'name')
+            'assetName': _.get(data, 'token_id')
         };
     } catch (error) {
         if (error.response) {
