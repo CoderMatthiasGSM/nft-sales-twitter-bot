@@ -92,9 +92,9 @@ async function monitorContract() {
 
             // if more than one asset sold, link directly to etherscan tx, otherwise the marketplace item
             if (tokens.length > 1) {
-                tweet(`Warrior of Aradena #${assetName} & other assets bought for ${totalPrice} ${currency.name} on ${market.name} https://etherscan.io/tx/${transactionHash}`);
+                tweet(`Warrior of Aradena #${_.get(tokenData, 'assetName')} & other assets bought for ${totalPrice} ${currency.name} on ${market.name} https://etherscan.io/tx/${transactionHash}`);
             } else {
-                tweet(`Warrior of Aradena #${assetName} bought for ${totalPrice} ${currency.name} on ${market.name} ${market.site}${process.env.CONTRACT_ADDRESS}/${tokens[0]}`);
+                tweet(`Warrior of Aradena #${_.get(tokenData, 'assetName')} bought for ${totalPrice} ${currency.name} on ${market.name} ${market.site}${process.env.CONTRACT_ADDRESS}/${tokens[0]}`);
             }
         })
         .on('changed', (event) => {
