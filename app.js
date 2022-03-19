@@ -94,7 +94,7 @@ async function monitorContract() {
             if (tokens.length > 1) {
                 tweet(`Warrior of Aradena #${_.get(tokenData, 'assetName')} & other assets bought for ${totalPrice} ${currency.name} on ${market.name} https://etherscan.io/tx/${transactionHash}`);
             } else {
-                tweet(`Warrior of Aradena #${_.get(tokenData, 'assetName')} bought for ${totalPrice} ${currency.name} on ${market.name} ${market.site}${process.env.CONTRACT_ADDRESS}/${tokens[0]}`);
+                tweet(`Warrior of Aradena #${_.get(tokenData, 'assetName')} has joined a new guild for ${totalPrice} ${currency.name} (${market.name}). Aradena welcomes you ⚔️🍻! #NFT #StrategyGame #PlayToEarn ${market.site}${process.env.CONTRACT_ADDRESS}/${tokens[0]}`);
             }
         })
         .on('changed', (event) => {
