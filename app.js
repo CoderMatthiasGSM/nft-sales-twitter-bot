@@ -224,7 +224,7 @@ async function getTokenData(tokenId,contractType) {
         // just the asset name for now, but retrieve whatever you need
         return {
             'assetName': _.get(data, 'token_id')
-        };F
+        };
     } catch (error) {
         if (error.response) {
             console.log(error.response.data);
