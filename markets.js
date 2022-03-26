@@ -1,7 +1,7 @@
 const markets = {
     // OpenSea Contract Address
     '0x7f268357a8c2552623316e2562d90e642bb538e5' : {
-        'name': 'OpenSea 🌊',
+        'name': 'OpenSea',
         'site': 'https://opensea.io/assets/',
         'logDecoder': [{
             type: 'bytes32',
