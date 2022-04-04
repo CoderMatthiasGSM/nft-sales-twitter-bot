@@ -33,6 +33,22 @@ async function monitorContract() {
             }
 
             lastTransactionHash = transactionHash;
+        
+            // attempt to retrieve the receipt, sometimes not available straight away
+            const receipt = await retry(
+               async (bail) => {
+                  const rec = await web3.eth.getTransactionReceipt(transactionHash);
+
+                  if (rec == null) {
+                    throw new Error('receipt not found, try again');
+                  }
+
+                  return rec;
+                },
+                {
+                  retries: 5,
+                }
+              );
 
             const receipt = await web3.eth.getTransactionReceipt(transactionHash);
 
@@ -70,8 +86,6 @@ async function monitorContract() {
                     tokens.push(tokenId);
                 }
                 
-                const contractType = 'Men';
-
                 // transaction log - decode log in correct format depending on market & retrieve price
                 if (logAddress == recipient && saleEventTypes.includes(log.topics[0])) {
                     const decodedLogData = web3.eth.abi.decodeLog(market.logDecoder, log.data, []);
@@ -126,6 +140,22 @@ async function monitorContractWOMEN() {
             }
 
             lastTransactionHash = transactionHash;
+  
+            // attempt to retrieve the receipt, sometimes not available straight away
+            const receipt = await retry(
+               async (bail) => {
+                  const rec = await web3.eth.getTransactionReceipt(transactionHash);
+
+                  if (rec == null) {
+                    throw new Error('receipt not found, try again');
+                  }
+
+                  return rec;
+                },
+                {
+                  retries: 5,
+                }
+              );
 
             const receipt = await web3.eth.getTransactionReceipt(transactionHash);
 
@@ -170,7 +200,6 @@ async function monitorContractWOMEN() {
                     totalPrice = ethers.utils.formatUnits(decodedLogData.price, currency.decimals);
                 }
                 
-                const contractType = 'Women';
             }
 
             // remove any dupes
@@ -205,34 +234,58 @@ async function monitorContractWOMEN() {
 
 async function getTokenData(tokenId,contractType) {
     try {
-        // retrieve metadata for asset from opensea
-        if (contractType == "Men"){
-            const response = await axios.get(`https://api.opensea.io/api/v1/asset/${process.env.CONTRACT_ADDRESS}/${tokenId}`, {
-                headers: {
-                    'X-API-KEY': process.env.X_API_KEY
-            }
-        });}
-        else {
-            const response = await axios.get(`https://api.opensea.io/api/v1/asset/${process.env.CONTRACT_ADDRESS_2}/${tokenId}`, {
-                headers: {
-                   'X-API-KEY': process.env.X_API_KEY
-            }   
-        });}
+    // retrieve metadata for asset from opensea
+    const response = await axios.get(
+      `https://api.opensea.io/api/v1/asset/${process.env.CONTRACT_ADDRESS}/${tokenId}`,
+      {
+        headers: {
+          'X-API-KEY': process.env.X_API_KEY,
+        },
+      }
+    );
 
-        const data = response.data;
+    const data = response.data;
 
-        // just the asset name for now, but retrieve whatever you need
-        return {
-            'assetName': _.get(data, 'token_id')
-        };
-    } catch (error) {
-        if (error.response) {
-            console.log(error.response.data);
-            console.log(error.response.status);
-        } else {
-            console.error(error.message);
-        }
+    // just the asset name for now, but retrieve whatever you need
+    return {
+      'assetName': _.get(data, 'token_id'),
+    };
+  } catch (error) {
+    if (error.response) {
+      console.log(error.response.data);
+      console.log(error.response.status);
+    } else {
+      console.error(error.message);
     }
+  }
+}
+
+async function getTokenDataWomen(tokenId,contractType) {
+    try {
+    // retrieve metadata for asset from opensea
+    const response = await axios.get(
+      `https://api.opensea.io/api/v1/asset/${process.env.CONTRACT_ADDRESS_2}/${tokenId}`,
+      {
+        headers: {
+          'X-API-KEY': process.env.X_API_KEY,
+        },
+      }
+    );
+
+    const data = response.data;
+
+    // just the asset name for now, but retrieve whatever you need
+    return {
+      'assetName': _.get(data, 'token_id'),
+    };
+  } catch (error) {
+    if (error.response) {
+      console.log(error.response.data);
+      console.log(error.response.status);
+    } else {
+      console.error(error.message);
+    }
+  }
 }
 
 // initate websocket connection
