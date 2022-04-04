@@ -2,6 +2,7 @@
 const { createAlchemyWeb3 } = require("@alch/alchemy-web3");
 const axios = require('axios');
 const { ethers } = require('ethers');
+const retry = require('async-retry');
 const _ = require('lodash');
 // local
 const { markets } = require('./markets.js');
