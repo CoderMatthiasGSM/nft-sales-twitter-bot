@@ -108,7 +108,7 @@ async function monitorContract() {
 
             // if more than one asset sold, link directly to etherscan tx, otherwise the marketplace item
             if (tokens.length > 1) {
-                tweet(`Many valiant Warriors of Aradena have joined a new guild for ${totalPrice} ${currency.name} thanks to Sir Opensea ${market.name} https://etherscan.io/tx/${transactionHash}`);
+                tweet(`Many valiant Warriors of Aradena have joined a new guild for ${totalPrice} ${currency.name} thanks to Sir ${market.name}📯 https://etherscan.io/tx/${transactionHash}`);
             } else {
                 tweet(`Warrior of Aradena #${tokens[0]} has joined a new guild for ${totalPrice} ${currency.name} (${market.name}). Aradena welcomes you ⚔️🍻! #NFT #StrategyGame #PlayToEarn ${market.site}${process.env.CONTRACT_ADDRESS}/${tokens[0]}`);
             }
@@ -214,7 +214,7 @@ async function monitorContractWOMEN() {
 
             // if more than one asset sold, link directly to etherscan tx, otherwise the marketplace item
             if (tokens.length > 1) {
-                tweet(`Many valiant Women of Aradena have joined a new guild for ${totalPrice} ${currency.name} on ${market.name} https://etherscan.io/tx/${transactionHash}`);
+                tweet(`Many valiant Women of Aradena have joined a new guild for ${totalPrice} ${currency.name} on ${market.name}📯 https://etherscan.io/tx/${transactionHash}`);
             } else {
                 tweet(`Woman of Aradena #${tokens[0]} has joined a new guild for ${totalPrice} ${currency.name} (${market.name}). Aradena welcomes you ⚔️🍻! #NFT #StrategyGame #PlayToEarn ${market.site}${process.env.CONTRACT_ADDRESS_2}/${tokens[0]}`);
             }
