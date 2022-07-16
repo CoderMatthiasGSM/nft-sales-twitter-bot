@@ -117,7 +117,7 @@ async function monitorContract() {
 
             // retrieve metadata for the first (or only) ERC21 asset sold
             const tokenData = await getTokenData(tokens[0]);
-            if (totalPrice === undefined) {
+            if ((totalPrice === undefined) || (totalPrice == 0)) {
                 totalPrice = 'a mysterious amount of';}
             // if more than one asset sold, link directly to etherscan tx, otherwise the marketplace item
             if (tokens.length > 1) {
@@ -235,7 +235,7 @@ async function monitorContractWOMEN() {
 
             // retrieve metadata for the first (or only) ERC21 asset sold
             const tokenData = await getTokenDataWomen(tokens[0]);
-            if (totalPrice === undefined) {
+            if ((totalPrice === undefined) || (totalPrice == 0)) {
                 totalPrice = 'a mysterious amount of';}
             // if more than one asset sold, link directly to etherscan tx, otherwise the marketplace item
             if (tokens.length > 1) {
