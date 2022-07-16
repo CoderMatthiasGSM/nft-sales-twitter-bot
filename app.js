@@ -138,7 +138,7 @@ async function monitorContract() {
             // retrieve metadata for the first (or only) ERC21 asset sold
             const tokenData = await getTokenData(tokens[0]);
             if (totalPrice === undefined) {
-                totalPrice = 'a mysterious amount of';
+                totalPrice = 'a mysterious amount of';}
             // if more than one asset sold, link directly to etherscan tx, otherwise the marketplace item
             if (tokens.length > 1) {
                 tweet(`Many valiant Warriors of Aradena have joined a new guild for ${totalPrice} ${currency.name} thanks to Sir ${market.name}📯 https://etherscan.io/tx/${transactionHash}`);
