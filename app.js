@@ -68,7 +68,7 @@ async function monitorContract() {
                 'threshold': 1
             };
             let tokens = [];
-            let totalPrice;
+            let totalPrice = ethers.BigNumber.from("0");
 
             for (let log of receipt.logs) {
                 const logAddress = log.address.toLowerCase();
@@ -88,6 +88,38 @@ async function monitorContract() {
                 // transaction log - decode log in correct format depending on market & retrieve price
                 if (logAddress == recipient && saleEventTypes.includes(log.topics[0])) {
                     const decodedLogData = web3.eth.abi.decodeLog(market.logDecoder, log.data, []);
+
+                  if (market.name.includes("Seaport")) {
+                    let startOffset = ethers.BigNumber.from("0x140");
+
+                    for (
+                      let i = ethers.BigNumber.from("1");
+                      i.lte(decodedLogData.offerConsiderationLength);
+                      i = i.add(1)
+                    ) {
+                      let endOffset = startOffset.add(ethers.BigNumber.from("0xa0"));
+
+                      let considerationLogData = ethers.utils.hexDataSlice(
+                        log.data,
+                        startOffset.toHexString(),
+                        endOffset.toHexString()
+                      );
+
+                      totalPrice = totalPrice.add(
+                        ethers.BigNumber.from(
+                          ethers.utils.hexDataSlice(
+                            considerationLogData,
+                            "0x60",
+                            "0x80"
+                          )
+                        )
+                      );
+
+                      decodedLogData.price = totalPrice;
+
+                      startOffset = endOffset;
+                    }
+                  }
 
                     totalPrice = ethers.utils.formatUnits(decodedLogData.price, currency.decimals);
                 }
@@ -193,6 +225,38 @@ async function monitorContractWOMEN() {
                 // transaction log - decode log in correct format depending on market & retrieve price
                 if (logAddress == recipient && saleEventTypes.includes(log.topics[0])) {
                     const decodedLogData = web3.eth.abi.decodeLog(market.logDecoder, log.data, []);
+
+                  if (market.name.includes("Seaport")) {
+                    let startOffset = ethers.BigNumber.from("0x140");
+
+                    for (
+                      let i = ethers.BigNumber.from("1");
+                      i.lte(decodedLogData.offerConsiderationLength);
+                      i = i.add(1)
+                    ) {
+                      let endOffset = startOffset.add(ethers.BigNumber.from("0xa0"));
+
+                      let considerationLogData = ethers.utils.hexDataSlice(
+                        log.data,
+                        startOffset.toHexString(),
+                        endOffset.toHexString()
+                      );
+
+                      totalPrice = totalPrice.add(
+                        ethers.BigNumber.from(
+                          ethers.utils.hexDataSlice(
+                            considerationLogData,
+                            "0x60",
+                            "0x80"
+                          )
+                        )
+                      );
+
+                      decodedLogData.price = totalPrice;
+
+                      startOffset = endOffset;
+                    }
+                  }
 
                     totalPrice = ethers.utils.formatUnits(decodedLogData.price, currency.decimals);
                 }
