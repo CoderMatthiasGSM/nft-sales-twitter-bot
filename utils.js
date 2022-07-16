@@ -59,7 +59,44 @@ async function getTokenData(tokenId) {
 
         // just the asset name for now, but retrieve whatever you need
         return {
-          assetName: _.get(data, 'name'),
+          assetName: _.get(data, 'token_id'),
+        };
+      },
+      {
+        retries: 5,
+      }
+    );
+
+    return assetName;
+  } catch (error) {
+    if (error.response) {
+      console.log(error.response.data);
+      console.log(error.response.status);
+    } else {
+      console.error(error.message);
+    }
+  }
+}
+
+async function getTokenDataWomen(tokenId) {
+  try {
+    const assetName = await retry(
+      async (bail) => {
+        // retrieve metadata for asset from opensea
+        const response = await axios.get(
+          `https://api.opensea.io/api/v1/asset/${process.env.CONTRACT_ADDRESS_2}/${tokenId}`,
+          {
+            headers: {
+              'X-API-KEY': process.env.X_API_KEY,
+            },
+          }
+        );
+
+        const data = response.data;
+
+        // just the asset name for now, but retrieve whatever you need
+        return {
+          assetName: _.get(data, 'token_id'),
         };
       },
       {
