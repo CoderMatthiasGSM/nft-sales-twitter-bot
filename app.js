@@ -1,11 +1,11 @@
 // external
 const { createAlchemyWeb3 } = require("@alch/alchemy-web3");
-const axios = require('axios');
 const { ethers } = require('ethers');
 const retry = require('async-retry');
 const _ = require('lodash');
 // local
 const { markets } = require('./markets.js');
+const { getTokenData, getTokenDataWomen, getSeaportSalePrice } = require('./utils.js');
 const { currencies } = require('./currencies.js');
 const { transferEventTypes, saleEventTypes } = require('./log_event_types.js');
 const { tweet } = require('./tweet');
@@ -68,7 +68,7 @@ async function monitorContract() {
                 'threshold': 1
             };
             let tokens = [];
-            let totalPrice = ethers.BigNumber.from("0");
+            let totalPrice;
 
             for (let log of receipt.logs) {
                 const logAddress = log.address.toLowerCase();
@@ -89,40 +89,20 @@ async function monitorContract() {
                 if (logAddress == recipient && saleEventTypes.includes(log.topics[0])) {
                     const decodedLogData = web3.eth.abi.decodeLog(market.logDecoder, log.data, []);
 
-                  if (market.name.includes("Seaport")) {
-                    let startOffset = ethers.BigNumber.from("0x140");
-
-                    for (
-                      let i = ethers.BigNumber.from("1");
-                      i.lte(decodedLogData.offerConsiderationLength);
-                      i = i.add(1)
-                    ) {
-                      let endOffset = startOffset.add(ethers.BigNumber.from("0xa0"));
-
-                      let considerationLogData = ethers.utils.hexDataSlice(
-                        log.data,
-                        startOffset.toHexString(),
-                        endOffset.toHexString()
-                      );
-
-                      totalPrice = totalPrice.add(
-                        ethers.BigNumber.from(
-                          ethers.utils.hexDataSlice(
-                            considerationLogData,
-                            "0x60",
-                            "0x80"
-                          )
-                        )
-                      );
-
-                      decodedLogData.price = totalPrice;
-
-                      startOffset = endOffset;
-                    }
-                  }
-
-                    totalPrice = ethers.utils.formatUnits(decodedLogData.price, currency.decimals);
-                }
+                   if (market.name == 'Opensea ⚓️') {
+                    totalPrice = getSeaportSalePrice(decodedLogData);
+                   } else if (market.name == 'X2Y2 ⭕️') {
+                    totalPrice = ethers.utils.formatUnits(
+                      decodedLogData.amount,
+                      currency.decimals
+                    );
+                   } else {
+                    totalPrice = ethers.utils.formatUnits(
+                      decodedLogData.price,
+                      currency.decimals
+                    );
+                 }
+               }
             }
 
             // remove any dupes
@@ -227,42 +207,21 @@ async function monitorContractWOMEN() {
                 if (logAddress == recipient && saleEventTypes.includes(log.topics[0])) {
                     const decodedLogData = web3.eth.abi.decodeLog(market.logDecoder, log.data, []);
 
-                  if (market.name.includes("Seaport")) {
-                    let startOffset = ethers.BigNumber.from("0x140");
-
-                    for (
-                      let i = ethers.BigNumber.from("1");
-                      i.lte(decodedLogData.offerConsiderationLength);
-                      i = i.add(1)
-                    ) {
-                      let endOffset = startOffset.add(ethers.BigNumber.from("0xa0"));
-
-                      let considerationLogData = ethers.utils.hexDataSlice(
-                        log.data,
-                        startOffset.toHexString(),
-                        endOffset.toHexString()
-                      );
-
-                      totalPrice = totalPrice.add(
-                        ethers.BigNumber.from(
-                          ethers.utils.hexDataSlice(
-                            considerationLogData,
-                            "0x60",
-                            "0x80"
-                          )
-                        )
-                      );
-
-                      decodedLogData.price = totalPrice;
-
-                      startOffset = endOffset;
-                    }
+                  if (market.name == 'Opensea ⚓️') {
+                    totalPrice = getSeaportSalePrice(decodedLogData);
+                  } else if (market.name == 'X2Y2 ⭕️') {
+                    totalPrice = ethers.utils.formatUnits(
+                      decodedLogData.amount,
+                      currency.decimals
+                    );
+                  } else {
+                    totalPrice = ethers.utils.formatUnits(
+                      decodedLogData.price,
+                      currency.decimals
+                    );
                   }
-
-                    totalPrice = ethers.utils.formatUnits(decodedLogData.price, currency.decimals);
                 }
-                
-            }
+              }
 
             // remove any dupes
             tokens = _.uniq(tokens);
@@ -275,7 +234,7 @@ async function monitorContractWOMEN() {
             // }
 
             // retrieve metadata for the first (or only) ERC21 asset sold
-            const tokenData = await getTokenData(tokens[0]);
+            const tokenData = await getTokenDataWomen(tokens[0]);
             if (totalPrice === undefined) {
                 totalPrice = 'a mysterious amount of';}
             // if more than one asset sold, link directly to etherscan tx, otherwise the marketplace item
@@ -293,62 +252,6 @@ async function monitorContractWOMEN() {
             console.error(error);
             console.error(receipt);
         });
-}
-
-async function getTokenData(tokenId,contractType) {
-    try {
-    // retrieve metadata for asset from opensea
-    const response = await axios.get(
-      `https://api.opensea.io/api/v1/asset/${process.env.CONTRACT_ADDRESS}/${tokenId}`,
-      {
-        headers: {
-          'X-API-KEY': process.env.X_API_KEY,
-        },
-      }
-    );
-
-    const data = response.data;
-
-    // just the asset name for now, but retrieve whatever you need
-    return {
-      'assetName': _.get(data, 'token_id'),
-    };
-  } catch (error) {
-    if (error.response) {
-      console.log(error.response.data);
-      console.log(error.response.status);
-    } else {
-      console.error(error.message);
-    }
-  }
-}
-
-async function getTokenDataWomen(tokenId,contractType) {
-    try {
-    // retrieve metadata for asset from opensea
-    const response = await axios.get(
-      `https://api.opensea.io/api/v1/asset/${process.env.CONTRACT_ADDRESS_2}/${tokenId}`,
-      {
-        headers: {
-          'X-API-KEY': process.env.X_API_KEY,
-        },
-      }
-    );
-
-    const data = response.data;
-
-    // just the asset name for now, but retrieve whatever you need
-    return {
-      'assetName': _.get(data, 'token_id'),
-    };
-  } catch (error) {
-    if (error.response) {
-      console.log(error.response.data);
-      console.log(error.response.status);
-    } else {
-      console.error(error.message);
-    }
-  }
 }
 
 // initate websocket connection
