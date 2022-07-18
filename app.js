@@ -5,7 +5,7 @@ const retry = require('async-retry');
 const _ = require('lodash');
 // local
 const { markets } = require('./markets.js');
-const { getTokenData, getTokenDataWomen, getSeaportSalePrice } = require('./utils.js');
+const { getTokenData, getTokenDataWomen, getSeaportSalePrice, getSeaportSalePrice2 } = require('./utils.js');
 const { currencies } = require('./currencies.js');
 const { transferEventTypes, saleEventTypes } = require('./log_event_types.js');
 const { tweet } = require('./tweet');
