@@ -208,7 +208,7 @@ async function monitorContractWOMEN() {
                     const decodedLogData = web3.eth.abi.decodeLog(market.logDecoder, log.data, []);
 
                   if (market.name == 'Opensea ⚓️') {
-                    totalPrice = getSeaportSalePrice(decodedLogData);
+                    totalPrice = getSeaportSalePrice2(decodedLogData);
                   } else if (market.name == 'X2Y2 ⭕️') {
                     totalPrice = ethers.utils.formatUnits(
                       decodedLogData.amount,
