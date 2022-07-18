@@ -41,6 +41,27 @@ function getSeaportSalePrice(decodedLogData) {
   }
 }
 
+function getSeaportSalePrice2(decodedLogData) {
+  const offer = decodedLogData.offer;
+  const consideration = decodedLogData.consideration;
+
+  const offerSideNfts = offer.some(
+    (item) =>
+      item.token.toLowerCase() === process.env.CONTRACT_ADDRESS_2.toLowerCase()
+  );
+
+  // if nfts are on the offer side, then consideration is the total price, otherwise the offer is the total price
+  if (offerSideNfts) {
+    const totalConsiderationAmount = consideration.reduce(_reducer, 0);
+
+    return totalConsiderationAmount;
+  } else {
+    const totalOfferAmount = offer.reduce(_reducer, 0);
+
+    return totalOfferAmount;
+  }
+}
+
 async function getTokenData(tokenId) {
   try {
     const assetName = await retry(
