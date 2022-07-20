@@ -138,6 +138,7 @@ async function getTokenDataWomen(tokenId) {
 
 module.exports = {
   getSeaportSalePrice: getSeaportSalePrice,
+  getSeaportSalePrice: getSeaportSalePrice2, 
   getTokenData: getTokenData,
   getTokenDataWomen: getTokenDataWomen,
 };
