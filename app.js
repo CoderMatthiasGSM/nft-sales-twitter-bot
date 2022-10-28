@@ -126,7 +126,8 @@ async function monitorContract() {
             if (tokens.length > 1) {
                 tweet(`Many valiant Warriors of Aradena have joined a new army for a legendary amount of ${currency.name} thanks to Sir ${market.name}📯 https://etherscan.io/tx/${transactionHash}`);
             } else {
-                tweet(`Warrior of Aradena #${tokens[0]} has joined a new army for ${totalPrice} ${currency.name} (${market.name}). Aradena welcomes you ⚔️🍻! #Tcg #NFT #Gaming ${market.site}${process.env.CONTRACT_ADDRESS}/${tokens[0]}`);
+                tweet(`Warrior of Aradena #${tokens[0]} has joined a new army for ${totalPrice} ${currency.name} (${market.name}). Aradena welcomes you ⚔️🍻! #Tcg #NFT #Gaming https://rarible.com/token/${process.env.CONTRACT_ADDRESS}:${tokens[0]}`);
+                //${market.site}${process.env.CONTRACT_ADDRESS}/${tokens[0]}
             }
         })
         .on('changed', (event) => {
@@ -248,7 +249,8 @@ async function monitorContractWOMEN() {
             if (tokens.length > 1) {
                 tweet(`Many valiant Women of Aradena have joined a new army for a legendary amount of ${currency.name} on ${market.name}📯 https://etherscan.io/tx/${transactionHash}`);
             } else {
-                tweet(`Woman of Aradena #${tokens[0]} has joined a new army for ${totalPrice} ${currency.name} (${market.name}). Aradena welcomes you ⚔️🍻! #Tcg #NFT #Gaming ${market.site}${process.env.CONTRACT_ADDRESS_2}/${tokens[0]}`);
+                tweet(`Woman of Aradena #${tokens[0]} has joined a new army for ${totalPrice} ${currency.name} (${market.name}). Aradena welcomes you ⚔️🍻! #Tcg #NFT #Gaming https://rarible.com/token/${process.env.CONTRACT_ADDRESS_2}:${tokens[0]}`);
+                //${market.site}${process.env.CONTRACT_ADDRESS_2}/${tokens[0]}
             }
         })
         .on('changed', (event) => {
