@@ -133,6 +133,12 @@ async function monitorContract() {
     // retrieve metadata for the first (or only) ERC21 asset sold
     const tokenData = await getTokenData(tokens[0]);
 
+    if ((totalPrice === undefined) || (totalPrice == 0)) {
+            console.log(totalPrice);
+            totalPrice = 'a mysterious amount of';
+        } else {
+            totalPrice = parseFloat(totalPrice).toFixed(3);}
+    
     // if more than one asset sold, link directly to etherscan tx, otherwise the marketplace item
     if (tokens.length > 1) {
       tweet(`Many valiant Warriors of Aradena have joined a new army for a legendary amount of ${totalPrice} ${currency.name} thanks to Sir ${market.name}📯 https://etherscan.io/tx/${transactionHash}`);
@@ -254,6 +260,12 @@ async function monitorContractWOMEN() {
 
     // retrieve metadata for the first (or only) ERC21 asset sold
     const tokenData = await getTokenData(tokens[0]);
+    
+    if ((totalPrice === undefined) || (totalPrice == 0)) {
+                console.log(totalPrice);
+                totalPrice = 'a mysterious amount of';
+            } else {
+                totalPrice = parseFloat(totalPrice).toFixed(3);}
 
     // if more than one asset sold, link directly to etherscan tx, otherwise the marketplace item
     if (tokens.length > 1) {
