@@ -6,7 +6,7 @@ const _ = require('lodash');
 const { ethers } = require('ethers');
 // local
 const { markets } = require('./markets.js');
-const { getTokenData, getSeaportSalePrice } = require('./utils.js');
+const { getTokenData, getTokenDataWomen, getSeaportSalePrice, getSeaportSalePrice2 } = require('./utils.js');
 const { currencies } = require('./currencies.js');
 const { transferEventTypes, saleEventTypes } = require('./log_event_types.js');
 const { tweet } = require('./tweet');
@@ -228,7 +228,7 @@ async function monitorContractWOMEN() {
         })?.args;
 
         if (market?.name == 'Opensea ⚓️') {
-          totalPrice += getSeaportSalePrice(decodedLogData);
+          totalPrice += getSeaportSalePrice2(decodedLogData);
         } else if (market.name == 'Blur 🟠') {
           totalPrice += Number(ethers.utils.formatUnits(
             decodedLogData.sell.price,
@@ -259,7 +259,7 @@ async function monitorContractWOMEN() {
     // }
 
     // retrieve metadata for the first (or only) ERC21 asset sold
-    const tokenData = await getTokenData(tokens[0]);
+    const tokenData = await getTokenDataWomen(tokens[0]);
     
     if ((totalPrice === undefined) || (totalPrice == 0)) {
                 console.log(totalPrice);
