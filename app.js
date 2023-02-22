@@ -9,7 +9,7 @@ const { markets } = require('./markets.js');
 const { getTokenData, getTokenDataWomen, getSeaportSalePrice, getSeaportSalePrice2 } = require('./utils.js');
 const { currencies } = require('./currencies.js');
 const { transferEventTypes, saleEventTypes } = require('./log_event_types.js');
-const { tweet } = require('./tweet');
+const { tweet, tweetWithImage} = require('./tweet');
 const abi = require('./abi.json');
 const marketsAbi = require('./markets_abi.json');
 
