@@ -101,6 +101,8 @@ async function monitorContract() {
 
         if (market?.name == 'Opensea ⚓️') {
           totalPrice += getSeaportSalePrice(decodedLogData);
+        } else if (market.name == 'Opensea ⚓️+') {
+          totalPrice += getSeaportSalePrice(decodedLogData);
         } else if (market.name == 'Blur 🟠') {
           totalPrice += Number(ethers.utils.formatUnits(
             decodedLogData.sell.price,
@@ -229,6 +231,8 @@ async function monitorContractWOMEN() {
 
         if (market?.name == 'Opensea ⚓️') {
           totalPrice += getSeaportSalePrice2(decodedLogData);
+        } else if (market.name == 'Opensea ⚓️+') {
+          totalPrice += getSeaportSalePrice(decodedLogData);
         } else if (market.name == 'Blur 🟠') {
           totalPrice += Number(ethers.utils.formatUnits(
             decodedLogData.sell.price,
