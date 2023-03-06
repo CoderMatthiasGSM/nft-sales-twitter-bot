@@ -232,7 +232,7 @@ async function monitorContractWOMEN() {
         if (market?.name == 'Opensea ⚓️') {
           totalPrice += getSeaportSalePrice2(decodedLogData);
         } else if (market.name == 'Opensea ⚓️+') {
-          totalPrice += getSeaportSalePrice(decodedLogData);
+          totalPrice += getSeaportSalePrice2(decodedLogData);
         } else if (market.name == 'Blur 🟠') {
           totalPrice += Number(ethers.utils.formatUnits(
             decodedLogData.sell.price,
